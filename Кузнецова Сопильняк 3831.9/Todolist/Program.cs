@@ -27,7 +27,7 @@ namespace TodoList
         }
 
         // Вывод результата
-        Console.WriteLine($"Добро пожаловать пользователь {name} {surname}, возраст - {age}");
+        Console.WriteLine($"Добро пожаловать пользователь {firstName} {lastName}, возраст - {birthYear}");
 
             // 2. Создаем массив строк todos с начальной длиной 2 элемента
             string[] todos = new string[2];

@@ -1,6 +1,4 @@
 // See https://aka.ms/new-console-template for more information
-Console.WriteLine("Powered by Yarr and Angelina");
-
 using System;
 
 namespace TodoList
@@ -9,6 +7,7 @@ namespace TodoList
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Powered by Yarr and Angelina");
              // Запрос данных у пользователя
         Console.Write("Введите имя: ");
         string firstName = Console.ReadLine();

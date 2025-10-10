@@ -1,18 +1,19 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Powered by Yarr and Angelina");
-
+// See https://aka.ms/new-console-template for more information
 using System;
 
-class Program
+namespace TodoList
 {
-    static void Main()
+    class Program
     {
-        // Запрос данных у пользователя
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Powered by Yarr and Angelina");
+             // Запрос данных у пользователя
         Console.Write("Введите имя: ");
-        string name = Console.ReadLine();
+        string firstName = Console.ReadLine();
 
         Console.Write("Введите фамилию: ");
-        string surname = Console.ReadLine();
+        string lastName = Console.ReadLine();
 
         Console.Write("Введите год рождения: ");
         string yearInput = Console.ReadLine();
@@ -25,33 +26,12 @@ class Program
             yearInput = Console.ReadLine();
         }
 
-        // Получение текущего года
-        int currentYear = DateTime.Now.Year;
-
-        // Вычисление возраста
-        int age = currentYear - birthYear;
-
         // Вывод результата
-        Console.WriteLine($"Добро пожаловать пользователь {name} {surname}, возраст - {age}");
-    }
-}
-namespace TodoList
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
+        Console.WriteLine($"Добро пожаловать пользователь {firstName} {lastName}, возраст - {birthYear}");
+
             // 2. Создаем массив строк todos с начальной длиной 2 элемента
             string[] todos = new string[2];
             int taskCount = 0; // Счетчик реально добавленных задач
-            
-            // Данные пользователя
-            string firstName = "Иван";
-            string lastName = "Иванов";
-            int birthYear = 1990;
-
-            Console.WriteLine("Добро пожаловать в TodoList!");
-            Console.WriteLine("Введите 'help' для просмотра доступных команд.");
 
             // 3. Бесконечный цикл для обработки команд
             while (true)

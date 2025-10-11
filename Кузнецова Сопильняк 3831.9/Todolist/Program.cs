@@ -20,7 +20,7 @@ namespace TodoList
             Console.Write("Введите фамилию: ");
             string lastName = Console.ReadLine();
 
-            Console.Write("Введите год рождения: ");
+            Console.Write("Введите возраст: ");
             string yearInput = Console.ReadLine();
 
             int birthYear;

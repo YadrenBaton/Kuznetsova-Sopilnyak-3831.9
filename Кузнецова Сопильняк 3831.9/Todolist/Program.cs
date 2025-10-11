@@ -26,7 +26,7 @@ namespace TodoList
             int birthYear;
             while (!int.TryParse(yearInput, out birthYear))
             {
-                Console.Write("Ошибка! Введите корректный год рождения: ");
+                Console.Write("Ошибка! Введите корректный возраст: ");
                 yearInput = Console.ReadLine();
             }
 

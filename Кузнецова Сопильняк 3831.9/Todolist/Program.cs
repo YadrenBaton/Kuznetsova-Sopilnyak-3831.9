@@ -78,6 +78,7 @@ namespace TodoList
                 string command = inputParts[0].ToLower();
                 bool verbose = false;
                 bool force = false;
+                bool multiline = false;
 
                 for (int i = 1; i < inputParts.Length; i++)
                 {
@@ -88,6 +89,10 @@ namespace TodoList
                     else if (inputParts[i] == "--force" || inputParts[i] == "-f")
                     {
                         force = true;
+                    }
+                    else if (inputParts[i] == "--multiline" || inputParts[i] == "-m")
+                    {
+                        multiline = true;
                     }
                 }
 
@@ -123,7 +128,7 @@ namespace TodoList
                     default:
                         if (command.StartsWith("add"))
                         {
-                            taskCount = AddTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount);
+                            taskCount = AddTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, multiline);
                         }
                         else if (command.StartsWith("done"))
                         {
@@ -163,7 +168,8 @@ namespace TodoList
             Console.WriteLine("--skip-profile, -s - пропустить создание профиля");
             Console.WriteLine("--version, -v - показать версию");
             Console.WriteLine("--verbose, -V - подробный вывод");
-            Console.WriteLine("--force, -f - принудительное выполнение\n");
+            Console.WriteLine("--force, -f - принудительное выполнение");
+            Console.WriteLine("--multiline, -m - многострочный ввод для add\n");
         }
         // Выводит данные пользователя
         static void ShowProfile(string firstName, string lastName, int birthYear)
@@ -172,9 +178,34 @@ namespace TodoList
             Console.WriteLine($"{firstName} {lastName}, {birthYear}\n");
         }
         // Эт чтобы добавить задачу
-        static int AddTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount)
+        static int AddTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool multiline = false)
         {
-            string task = ExtractTaskText(input);
+            string task = "";
+
+            if (multiline)
+            {
+                Console.WriteLine("Многострочный режим. Вводите строки задачи. Для завершения введите !end");
+                string multilineTask = "";
+                while (true)
+                {
+                    Console.Write("> ");
+                    string line = Console.ReadLine();
+                    if (line == "!end")
+                    {
+                        break;
+                    }
+                    if (!string.IsNullOrEmpty(multilineTask))
+                    {
+                        multilineTask += "\n";
+                    }
+                    multilineTask += line;
+                }
+                task = multilineTask.Trim();
+            }
+            else
+            {
+                task = ExtractTaskText(input);
+            }
 
             if (string.IsNullOrWhiteSpace(task))
             {

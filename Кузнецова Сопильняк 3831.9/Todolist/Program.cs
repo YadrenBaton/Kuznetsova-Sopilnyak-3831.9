@@ -75,6 +75,9 @@ namespace TodoList
                     continue;
 
                 string[] inputParts = input.Split(' ');
+                if (inputParts == null || inputParts.Length == 0)
+                    continue;
+
                 string command = inputParts[0].ToLower();
                 bool verbose = false;
                 bool force = false;
@@ -183,6 +186,8 @@ namespace TodoList
         // Выводит данные пользователя
         static void ShowProfile(string firstName, string lastName, int birthYear)
         {
+            if (firstName == null) firstName = "";
+            if (lastName == null) lastName = "";
             Console.WriteLine($"\n=== Профиль пользователя ===");
             Console.WriteLine($"{firstName} {lastName}, {birthYear}\n");
         }
@@ -199,6 +204,7 @@ namespace TodoList
                 {
                     Console.Write("> ");
                     string line = Console.ReadLine();
+                    if (line == null) continue;
                     if (line == "!end")
                     {
                         break;
@@ -248,7 +254,16 @@ namespace TodoList
                 return;
             }
 
+            if (descriptions == null || statuses == null || dates == null)
+            {
+                Console.WriteLine("Ошибка: Массивы задач не инициализированы.");
+                return;
+            }
+
             string[] inputParts = input.Split(' ');
+            if (inputParts == null)
+                return;
+
             bool showIndex = false;
             bool showStatus = false;
             bool showDate = false;
@@ -287,6 +302,7 @@ namespace TodoList
                 for (int i = 0; i < taskCount; i++)
                 {
                     string shortDescription = descriptions[i];
+                    if (shortDescription == null) shortDescription = "";
                     if (shortDescription.Length > 30)
                     {
                         shortDescription = shortDescription.Substring(0, 27) + "...";
@@ -328,6 +344,7 @@ namespace TodoList
                 }
                 
                 string shortDescription = descriptions[i];
+                if (shortDescription == null) shortDescription = "";
                 if (shortDescription.Length > 30)
                 {
                     shortDescription = shortDescription.Substring(0, 27) + "...";
@@ -354,6 +371,9 @@ namespace TodoList
 
         static int MarkTaskAsDone(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
         {
+            if (descriptions == null || statuses == null || dates == null)
+                return taskCount;
+
             int taskIndex = ExtractTaskIndex(input, "done", taskCount);
             if (taskIndex == -1) return taskCount;
 
@@ -367,10 +387,14 @@ namespace TodoList
 
         static int DeleteTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force = false)
         {
+            if (descriptions == null || statuses == null || dates == null)
+                return taskCount;
+
             int taskIndex = ExtractTaskIndex(input, "delete", taskCount);
             if (taskIndex == -1) return taskCount;
 
             string deletedTask = descriptions[taskIndex];
+            if (deletedTask == null) deletedTask = "";
             
             if (!force && taskIndex < taskCount - 1)
             {
@@ -398,7 +422,15 @@ namespace TodoList
 
         static int UpdateTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force = false)
         {
+            if (descriptions == null || statuses == null || dates == null)
+                return taskCount;
+
             string[] parts = input.Split(new char[] { ' ' }, 3, StringSplitOptions.RemoveEmptyEntries);
+            if (parts == null || parts.Length < 3)
+            {
+                Console.WriteLine("Ошибка: Неверный формат команды. Используйте: update <индекс> \"новый текст\"");
+                return taskCount;
+            }
             
             if (parts.Length < 3 || !parts[2].StartsWith("\"") || !parts[2].EndsWith("\""))
             {
@@ -421,6 +453,7 @@ namespace TodoList
             }
 
             string oldText = descriptions[taskIndex];
+            if (oldText == null) oldText = "";
             descriptions[taskIndex] = newText;
             dates[taskIndex] = DateTime.Now; 
             
@@ -430,11 +463,16 @@ namespace TodoList
 
         static void ReadTask(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
         {
+            if (descriptions == null || statuses == null || dates == null)
+                return;
+
             int taskIndex = ExtractTaskIndex(input, "read", taskCount);
             if (taskIndex == -1) return;
 
+            string taskText = descriptions[taskIndex];
+            if (taskText == null) taskText = "";
             Console.WriteLine($"\n=== Задача {taskIndex} ===");
-            Console.WriteLine($"Текст: {descriptions[taskIndex]}");
+            Console.WriteLine($"Текст: {taskText}");
             string statusText = statuses[taskIndex] ? "выполнена" : "не выполнена";
             Console.WriteLine($"Статус: {statusText}");
             string formattedDate = dates[taskIndex].ToString("dd.MM.yyyy HH:mm");
@@ -443,6 +481,9 @@ namespace TodoList
 
         static void ExpandArrays(ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates)
         {
+            if (descriptions == null || statuses == null || dates == null)
+                return;
+
             int newSize = descriptions.Length * ARRAY_EXPANSION_MULTIPLIER;
             
             string[] newDescriptions = new string[newSize];
@@ -463,7 +504,15 @@ namespace TodoList
 
         static string ExtractTaskText(string input)
         {
+            if (input == null)
+                return null;
+
             string[] parts = input.Split('"');
+            if (parts == null || parts.Length < 2)
+            {
+                Console.WriteLine("Ошибка: Неверный формат команды. Используйте: add \"текст задачи\"");
+                return null;
+            }
             
             if (parts.Length < 2 || string.IsNullOrWhiteSpace(parts[1]))
             {
@@ -476,7 +525,15 @@ namespace TodoList
 
         static int ExtractTaskIndex(string input, string commandName, int taskCount)
         {
+            if (input == null)
+                return -1;
+
             string[] parts = input.Split(' ');
+            if (parts == null || parts.Length < 2)
+            {
+                Console.WriteLine($"Ошибка: Неверный формат команды. Используйте: {commandName} <индекс>");
+                return -1;
+            }
             
             if (parts.Length < 2 || !int.TryParse(parts[1], out int taskIndex))
             {

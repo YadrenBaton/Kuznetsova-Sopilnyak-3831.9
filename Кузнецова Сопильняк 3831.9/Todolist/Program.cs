@@ -177,7 +177,7 @@ namespace TodoList
             Console.WriteLine($"\n=== Профиль пользователя ===");
             Console.WriteLine($"{firstName} {lastName}, {birthYear}\n");
         }
-        // Эт чтобы добавить задачу
+        // Эт чтобы добавить задачу с мультиками
         static int AddTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool multiline = false)
         {
             string task = "";

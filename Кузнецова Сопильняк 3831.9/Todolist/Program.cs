@@ -142,6 +142,10 @@ namespace TodoList
                         {
                             taskCount = UpdateTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
                         }
+                        else if (command.StartsWith("read"))
+                        {
+                            ReadTask(input, taskDescriptions, taskStatuses, taskDates, taskCount);
+                        }
                         else
                         {
                             Console.WriteLine("Неизвестная команда. Введите 'help' для просмотра доступных команд.");
@@ -158,6 +162,7 @@ namespace TodoList
             Console.WriteLine("profile - показать данные пользователя");
             Console.WriteLine("add \"текст задачи\" - добавить новую задачу");
             Console.WriteLine("view - показать все задачи");
+            Console.WriteLine("read <индекс> - показать полный текст задачи");
             Console.WriteLine("done <индекс> - отметить задачу выполненной");
             Console.WriteLine("delete <индекс> - удалить задачу");
             Console.WriteLine("update <индекс> \"текст\" - обновить текст задачи");
@@ -421,6 +426,19 @@ namespace TodoList
             
             Console.WriteLine($"Задача обновлена: \"{oldText}\" -> \"{newText}\"");
             return taskCount;
+        }
+
+        static void ReadTask(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
+        {
+            int taskIndex = ExtractTaskIndex(input, "read", taskCount);
+            if (taskIndex == -1) return;
+
+            Console.WriteLine($"\n=== Задача {taskIndex} ===");
+            Console.WriteLine($"Текст: {descriptions[taskIndex]}");
+            string statusText = statuses[taskIndex] ? "выполнена" : "не выполнена";
+            Console.WriteLine($"Статус: {statusText}");
+            string formattedDate = dates[taskIndex].ToString("dd.MM.yyyy HH:mm");
+            Console.WriteLine($"Дата изменения: {formattedDate}\n");
         }
 
         static void ExpandArrays(ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates)

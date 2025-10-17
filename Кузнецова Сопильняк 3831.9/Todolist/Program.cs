@@ -114,7 +114,7 @@ namespace TodoList
                         break;
                     
                     case "view":
-                        ViewTasks(taskDescriptions, taskStatuses, taskDates, taskCount);
+                        ViewTasks(taskDescriptions, taskStatuses, taskDates, taskCount, input);
                         break;
                     //Ссылочка :3
                     case "link":
@@ -169,7 +169,11 @@ namespace TodoList
             Console.WriteLine("--version, -v - показать версию");
             Console.WriteLine("--verbose, -V - подробный вывод");
             Console.WriteLine("--force, -f - принудительное выполнение");
-            Console.WriteLine("--multiline, -m - многострочный ввод для add\n");
+            Console.WriteLine("--multiline, -m - многострочный ввод для add");
+            Console.WriteLine("--index, -i - показывать индекс задачи (view)");
+            Console.WriteLine("--status, -s - показывать статус задачи (view)");
+            Console.WriteLine("--update-date, -d - показывать дату изменения (view)");
+            Console.WriteLine("--all, -a - показывать все данные (view)\n");
         }
         // Выводит данные пользователя
         static void ShowProfile(string firstName, string lastName, int birthYear)
@@ -231,7 +235,7 @@ namespace TodoList
             return taskCount;
         }
 
-        static void ViewTasks(string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
+        static void ViewTasks(string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount, string input)
         {
             if (taskCount == 0)
             {
@@ -239,12 +243,105 @@ namespace TodoList
                 return;
             }
 
+            string[] inputParts = input.Split(' ');
+            bool showIndex = false;
+            bool showStatus = false;
+            bool showDate = false;
+            bool showAll = false;
+
+            for (int i = 1; i < inputParts.Length; i++)
+            {
+                if (inputParts[i] == "--index" || inputParts[i] == "-i")
+                {
+                    showIndex = true;
+                }
+                else if (inputParts[i] == "--status" || inputParts[i] == "-s")
+                {
+                    showStatus = true;
+                }
+                else if (inputParts[i] == "--update-date" || inputParts[i] == "-d")
+                {
+                    showDate = true;
+                }
+                else if (inputParts[i] == "--all" || inputParts[i] == "-a")
+                {
+                    showAll = true;
+                }
+            }
+
+            if (showAll)
+            {
+                showIndex = true;
+                showStatus = true;
+                showDate = true;
+            }
+
+            if (!showIndex && !showStatus && !showDate)
+            {
+                Console.WriteLine("\n=== Список задач ===");
+                for (int i = 0; i < taskCount; i++)
+                {
+                    string shortDescription = descriptions[i];
+                    if (shortDescription.Length > 30)
+                    {
+                        shortDescription = shortDescription.Substring(0, 27) + "...";
+                    }
+                    Console.WriteLine($"{shortDescription}");
+                }
+                Console.WriteLine($"Всего задач: {taskCount}\n");
+                return;
+            }
+
+            int indexWidth = 6;
+            int descriptionWidth = 33;
+            int statusWidth = 10;
+            int dateWidth = 16;
+
             Console.WriteLine("\n=== Список задач ===");
+            
+            string header = "";
+            if (showIndex) header += "Индекс".PadRight(indexWidth);
+            header += "Описание".PadRight(descriptionWidth);
+            if (showStatus) header += "Статус".PadRight(statusWidth);
+            if (showDate) header += "Дата изменения".PadRight(dateWidth);
+            Console.WriteLine(header);
+
+            string separator = "";
+            if (showIndex) separator += new string('-', indexWidth);
+            separator += new string('-', descriptionWidth);
+            if (showStatus) separator += new string('-', statusWidth);
+            if (showDate) separator += new string('-', dateWidth);
+            Console.WriteLine(separator);
+
             for (int i = 0; i < taskCount; i++)
             {
-                string statusText = statuses[i] ? "Сделано" : "Не сделано";
-                string formattedDate = dates[i].ToString("dd.MM.yyyy HH:mm");
-                Console.WriteLine($"{i}. {descriptions[i]} [{statusText}] {formattedDate}");
+                string line = "";
+                
+                if (showIndex)
+                {
+                    line += i.ToString().PadRight(indexWidth);
+                }
+                
+                string shortDescription = descriptions[i];
+                if (shortDescription.Length > 30)
+                {
+                    shortDescription = shortDescription.Substring(0, 27) + "...";
+                }
+                line += shortDescription.PadRight(descriptionWidth);
+                
+                if (showStatus)
+                {
+                    string statusText = statuses[i] ? "Сделано" : "Не сделано";
+                    line += statusText.PadRight(statusWidth);
+                }
+                
+                if (showDate)
+                {
+                    string formattedDate = dates[i].ToString("dd.MM.yyyy HH:mm");
+                    line += formattedDate.PadRight(dateWidth);
+                }
+                
+                Console.WriteLine(line);
             }
             Console.WriteLine($"Всего задач: {taskCount}\n");
         }

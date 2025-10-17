@@ -102,61 +102,117 @@ namespace TodoList
                 switch (command)
                 {
                     case "help":
-                        ShowHelp();
+                        ExecuteHelp();
                         break;
                     
                     case "profile":
-                        if (skipProfile)
-                        {
-                            Console.WriteLine("Профиль отключен флагом --skip-profile");
-                        }
-                        else
-                        {
-                            ShowProfile(firstName, lastName, birthYear);
-                        }
+                        ExecuteProfile(firstName, lastName, birthYear, skipProfile);
                         break;
                     
                     case "view":
-                        ViewTasks(taskDescriptions, taskStatuses, taskDates, taskCount, input);
+                        ExecuteView(taskDescriptions, taskStatuses, taskDates, taskCount, input);
                         break;
                     //Ссылочка :3
                     case "link":
-                        Console.WriteLine("https://youtu.be/dQw4w9WgXcQ?si=RqvXF3hYQQogSgMs");
+                        ExecuteLink();
                         break;
 
                     case "exit":
-                        Console.WriteLine("Выход из программы...");
+                        ExecuteExit();
                         return;
                     
                     default:
                         if (command.StartsWith("add"))
                         {
-                            taskCount = AddTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, multiline);
+                            taskCount = ExecuteAdd(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, multiline);
                         }
                         else if (command.StartsWith("done"))
                         {
-                            taskCount = MarkTaskAsDone(input, taskDescriptions, taskStatuses, taskDates, taskCount);
+                            taskCount = ExecuteDone(input, taskDescriptions, taskStatuses, taskDates, taskCount);
                         }
                         else if (command.StartsWith("delete"))
                         {
-                            taskCount = DeleteTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
+                            taskCount = ExecuteDelete(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
                         }
                         else if (command.StartsWith("update"))
                         {
-                            taskCount = UpdateTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
+                            taskCount = ExecuteUpdate(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
                         }
                         else if (command.StartsWith("read"))
                         {
-                            ReadTask(input, taskDescriptions, taskStatuses, taskDates, taskCount);
+                            ExecuteRead(input, taskDescriptions, taskStatuses, taskDates, taskCount);
                         }
                         else
                         {
-                            Console.WriteLine("Неизвестная команда. Введите 'help' для просмотра доступных команд.");
+                            ExecuteUnknown();
                         }
                         break;
                 }
             }
         }
+
+        static void ExecuteHelp()
+        {
+            ShowHelp();
+        }
+
+        static void ExecuteProfile(string firstName, string lastName, int birthYear, bool skipProfile)
+        {
+            if (skipProfile)
+            {
+                Console.WriteLine("Профиль отключен флагом --skip-profile");
+            }
+            else
+            {
+                ShowProfile(firstName, lastName, birthYear);
+            }
+        }
+
+        static void ExecuteView(string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount, string input)
+        {
+            ViewTasks(descriptions, statuses, dates, taskCount, input);
+        }
+
+        static void ExecuteLink()
+        {
+            Console.WriteLine("https://youtu.be/dQw4w9WgXcQ?si=RqvXF3hYQQogSgMs");
+        }
+
+        static void ExecuteExit()
+        {
+            Console.WriteLine("Выход из программы...");
+        }
+
+        static int ExecuteAdd(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool multiline)
+        {
+            return AddTask(input, ref descriptions, ref statuses, ref dates, taskCount, multiline);
+        }
+
+        static int ExecuteDone(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
+        {
+            return MarkTaskAsDone(input, descriptions, statuses, dates, taskCount);
+        }
+
+        static int ExecuteDelete(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force)
+        {
+            return DeleteTask(input, ref descriptions, ref statuses, ref dates, taskCount, force);
+        }
+
+        static int ExecuteUpdate(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force)
+        {
+            return UpdateTask(input, ref descriptions, ref statuses, ref dates, taskCount, force);
+        }
+
+        static void ExecuteRead(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
+        {
+            ReadTask(input, descriptions, statuses, dates, taskCount);
+        }
+
+        static void ExecuteUnknown()
+        {
+            Console.WriteLine("Неизвестная команда. Введите 'help' для просмотра доступных команд.");
+        }
+
         // Единственное, что может помочь (нет)
         static void ShowHelp()
         {

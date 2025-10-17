@@ -12,34 +12,60 @@ namespace TodoList
         {
             Console.WriteLine("Powered by Yar and Angelina");
 
+            bool showHelpAtStart = false;
+            bool skipProfile = false;
             
-            
-            Console.Write("Введите имя: ");
-            string firstName = Console.ReadLine();
-
-            Console.Write("Введите фамилию: ");
-            string lastName = Console.ReadLine();
-
-            Console.Write("Введите возраст: ");
-            string yearInput = Console.ReadLine();
-
-            int birthYear;
-            while (!int.TryParse(yearInput, out birthYear))
+            for (int i = 0; i < args.Length; i++)
             {
-                Console.Write("Ошибка! Введите корректный возраст: ");
-                yearInput = Console.ReadLine();
+                if (args[i] == "--help" || args[i] == "-h")
+                {
+                    showHelpAtStart = true;
+                }
+                else if (args[i] == "--skip-profile" || args[i] == "-s")
+                {
+                    skipProfile = true;
+                }
+                else if (args[i] == "--version" || args[i] == "-v")
+                {
+                    Console.WriteLine("TodoList v1.0");
+                    return;
+                }
+            }
+            
+            if (showHelpAtStart)
+            {
+                ShowHelp();
             }
 
-            // Результаты 
-            Console.WriteLine($"Добро пожаловать пользователь {firstName} {lastName}, возраст - {birthYear}");
+            string firstName = "";
+            string lastName = "";
+            int birthYear = 0;
+            
+            if (!skipProfile)
+            {
+                Console.Write("Введите имя: ");
+                firstName = Console.ReadLine();
 
+                Console.Write("Введите фамилию: ");
+                lastName = Console.ReadLine();
+
+                Console.Write("Введите возраст: ");
+                string yearInput = Console.ReadLine();
+
+                while (!int.TryParse(yearInput, out birthYear))
+                {
+                    Console.Write("Ошибка! Введите корректный возраст: ");
+                    yearInput = Console.ReadLine();
+                }
+            // Результаты 
+                Console.WriteLine($"Добро пожаловать пользователь {firstName} {lastName}, возраст - {birthYear}");
+            }
             // Это массивы для задач
             string[] taskDescriptions = new string[INITIAL_ARRAY_SIZE];
             bool[] taskStatuses = new bool[INITIAL_ARRAY_SIZE];
             DateTime[] taskDates = new DateTime[INITIAL_ARRAY_SIZE];
             int taskCount = 0;
 
-            // Wbrk lkz rjvvfyl 
             while (true)
             {
                 Console.Write("> ");
@@ -48,22 +74,45 @@ namespace TodoList
                 if (string.IsNullOrWhiteSpace(input))
                     continue;
 
-                switch (input.ToLower())
+                string[] inputParts = input.Split(' ');
+                string command = inputParts[0].ToLower();
+                bool verbose = false;
+                bool force = false;
+
+                for (int i = 1; i < inputParts.Length; i++)
+                {
+                    if (inputParts[i] == "--verbose" || inputParts[i] == "-V")
+                    {
+                        verbose = true;
+                    }
+                    else if (inputParts[i] == "--force" || inputParts[i] == "-f")
+                    {
+                        force = true;
+                    }
+                }
+
+                switch (command)
                 {
                     case "help":
                         ShowHelp();
                         break;
                     
                     case "profile":
-                        ShowProfile(firstName, lastName, birthYear);
+                        if (skipProfile)
+                        {
+                            Console.WriteLine("Профиль отключен флагом --skip-profile");
+                        }
+                        else
+                        {
+                            ShowProfile(firstName, lastName, birthYear);
+                        }
                         break;
                     
                     case "view":
                         ViewTasks(taskDescriptions, taskStatuses, taskDates, taskCount);
                         break;
-
-                    //Ссылочка
-                     case "link":
+                    //Ссылочка :3
+                    case "link":
                         Console.WriteLine("https://youtu.be/dQw4w9WgXcQ?si=RqvXF3hYQQogSgMs");
                         break;
 
@@ -71,25 +120,22 @@ namespace TodoList
                         Console.WriteLine("Выход из программы...");
                         return;
                     
-                   
-                    
-
                     default:
-                        if (input.ToLower().StartsWith("add "))
+                        if (command.StartsWith("add"))
                         {
                             taskCount = AddTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount);
                         }
-                        else if (input.ToLower().StartsWith("done "))
+                        else if (command.StartsWith("done"))
                         {
                             taskCount = MarkTaskAsDone(input, taskDescriptions, taskStatuses, taskDates, taskCount);
                         }
-                        else if (input.ToLower().StartsWith("delete "))
+                        else if (command.StartsWith("delete"))
                         {
-                            taskCount = DeleteTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount);
+                            taskCount = DeleteTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
                         }
-                        else if (input.ToLower().StartsWith("update "))
+                        else if (command.StartsWith("update"))
                         {
-                            taskCount = UpdateTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount);
+                            taskCount = UpdateTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
                         }
                         else
                         {
@@ -99,11 +145,7 @@ namespace TodoList
                 }
             }
         }
-
-
-
-
-        // Единственное, что может помочь
+        // Единственное, что может помочь (нет)
         static void ShowHelp()
         {
             Console.WriteLine("\n=== Доступные команды ===");
@@ -116,17 +158,19 @@ namespace TodoList
             Console.WriteLine("update <индекс> \"текст\" - обновить текст задачи");
             Console.WriteLine("exit - выйти из программы\n");
             Console.WriteLine("link - показывает ссылочку");
+            Console.WriteLine("\n=== Флаги ===");
+            Console.WriteLine("--help, -h - показать справку");
+            Console.WriteLine("--skip-profile, -s - пропустить создание профиля");
+            Console.WriteLine("--version, -v - показать версию");
+            Console.WriteLine("--verbose, -V - подробный вывод");
+            Console.WriteLine("--force, -f - принудительное выполнение\n");
         }
-
         // Выводит данные пользователя
         static void ShowProfile(string firstName, string lastName, int birthYear)
         {
             Console.WriteLine($"\n=== Профиль пользователя ===");
             Console.WriteLine($"{firstName} {lastName}, {birthYear}\n");
         }
-
-
-
         // Эт чтобы добавить задачу
         static int AddTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount)
         {
@@ -137,14 +181,13 @@ namespace TodoList
                 Console.WriteLine("Ошибка: Текст задачи не может быть пустым.");
                 return taskCount;
             }
-
             // Проверку добавил
+
             if (taskCount >= descriptions.Length)
             {
                 ExpandArrays(ref descriptions, ref statuses, ref dates);
                 Console.WriteLine($"Массивы расширены до {descriptions.Length} элементов");
             }
-
 
             descriptions[taskCount] = task;
             statuses[taskCount] = false;
@@ -174,8 +217,8 @@ namespace TodoList
             }
             Console.WriteLine($"Всего задач: {taskCount}\n");
         }
-
         // Покажет задачи
+
         static int MarkTaskAsDone(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
         {
             int taskIndex = ExtractTaskIndex(input, "done", taskCount);
@@ -187,14 +230,20 @@ namespace TodoList
             Console.WriteLine($"Задача \"{descriptions[taskIndex]}\" отмечена как выполненная");
             return taskCount;
         }
-
         // Это удалит задачу
-        static int DeleteTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount)
+
+        static int DeleteTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force = false)
         {
             int taskIndex = ExtractTaskIndex(input, "delete", taskCount);
             if (taskIndex == -1) return taskCount;
 
             string deletedTask = descriptions[taskIndex];
+            
+            if (!force && taskIndex < taskCount - 1)
+            {
+                Console.WriteLine($"Используйте --force для удаления задачи не с конца списка");
+                return taskCount;
+            }
             
             for (int i = taskIndex; i < taskCount - 1; i++)
             {
@@ -214,9 +263,8 @@ namespace TodoList
             return taskCount;
         }
 
-        static int UpdateTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount)
+        static int UpdateTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force = false)
         {
-
             string[] parts = input.Split(new char[] { ' ' }, 3, StringSplitOptions.RemoveEmptyEntries);
             
             if (parts.Length < 3 || !parts[2].StartsWith("\"") || !parts[2].EndsWith("\""))

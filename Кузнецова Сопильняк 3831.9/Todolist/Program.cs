@@ -272,15 +272,15 @@ namespace TodoList
 
             for (int i = 1; i < inputParts.Length; i++)
             {
-                if (inputParts[i] == "--index" || inputParts[i] == "-i")
+                if (inputParts[i] == "--index" || inputParts[i] == "-i" || inputParts[i] == "-is" || inputParts[i] == "-dis")
                 {
                     showIndex = true;
                 }
-                else if (inputParts[i] == "--status" || inputParts[i] == "-s")
+                else if (inputParts[i] == "--status" || inputParts[i] == "-s" || inputParts[i] == "-is" || inputParts[i] == "-ds" || inputParts[i] == "-dis")
                 {
                     showStatus = true;
                 }
-                else if (inputParts[i] == "--update-date" || inputParts[i] == "-d")
+                else if (inputParts[i] == "--update-date" || inputParts[i] == "-d" || inputParts[i] == "-ds" || inputParts[i] == "-dis")
                 {
                     showDate = true;
                 }

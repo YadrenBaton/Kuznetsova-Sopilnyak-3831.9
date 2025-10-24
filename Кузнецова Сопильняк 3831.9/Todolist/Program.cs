@@ -98,61 +98,31 @@ namespace TodoList
                     }
                 }
 
-                switch (command)
-                {
-                    case "help":
-                        ExecuteHelp();
-                        break;
-                    
-                    case "profile":
-                        ExecuteProfile(firstName, lastName, birthYear, skipProfile);
-                        break;
-                    
-                    case "view":
-                        ExecuteView(taskDescriptions, taskStatuses, taskDates, taskCount, input);
-                        break;
+                if (command == "help")
+                    ShowHelp();
+                else if (command == "profile")
+                    ExecuteProfile(firstName, lastName, birthYear, skipProfile);
+                else if (command == "view")
+                    ExecuteView(taskDescriptions, taskStatuses, taskDates, taskCount, input);
                     //Ссылочка :3
-                    case "link":
-                        ExecuteLink();
-                        break;
+                else if (command == "link")
+                    ExecuteLink();
+                else if (command == "exit")
+                    Console.WriteLine("Выход из программы...");
+                else if (command.StartsWith("add"))
+                    taskCount = AddTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, multiline);
+                else if (command.StartsWith("done"))
+                    taskCount = ExecuteDone(input, taskDescriptions, taskStatuses, taskDates, taskCount);
+                else if (command.StartsWith("delete"))
+                    taskCount = ExecuteDelete(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
+                else if (command.StartsWith("update"))
+                    taskCount = ExecuteUpdate(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
+                else if (command.StartsWith("read"))
+                    ExecuteRead(input, taskDescriptions, taskStatuses, taskDates, taskCount);
+                else
+                    ExecuteUnknown();
 
-                    case "exit":
-                        ExecuteExit();
-                        return;
-                    
-                    default:
-                        if (command.StartsWith("add"))
-                        {
-                            taskCount = ExecuteAdd(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, multiline);
-                        }
-                        else if (command.StartsWith("done"))
-                        {
-                            taskCount = ExecuteDone(input, taskDescriptions, taskStatuses, taskDates, taskCount);
-                        }
-                        else if (command.StartsWith("delete"))
-                        {
-                            taskCount = ExecuteDelete(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
-                        }
-                        else if (command.StartsWith("update"))
-                        {
-                            taskCount = ExecuteUpdate(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
-                        }
-                        else if (command.StartsWith("read"))
-                        {
-                            ExecuteRead(input, taskDescriptions, taskStatuses, taskDates, taskCount);
-                        }
-                        else
-                        {
-                            ExecuteUnknown();
-                        }
-                        break;
-                }
             }
-        }
-
-        static void ExecuteHelp()
-        {
-            ShowHelp();
         }
 
         static void ExecuteProfile(string firstName, string lastName, int birthYear, bool skipProfile)
@@ -180,11 +150,6 @@ namespace TodoList
         static void ExecuteExit()
         {
             Console.WriteLine("Выход из программы...");
-        }
-
-        static int ExecuteAdd(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool multiline)
-        {
-            return AddTask(input, ref descriptions, ref statuses, ref dates, taskCount, multiline);
         }
 
         static int ExecuteDone(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)

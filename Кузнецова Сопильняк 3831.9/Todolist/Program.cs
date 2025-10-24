@@ -104,19 +104,22 @@ namespace TodoList
                     ExecuteProfile(firstName, lastName, birthYear, skipProfile);
                 else if (command == "view")
                     ExecuteView(taskDescriptions, taskStatuses, taskDates, taskCount, input);
-                    //Ссылочка :3
+                //Ссылочка :3
                 else if (command == "link")
                     ExecuteLink();
                 else if (command == "exit")
+                {
                     Console.WriteLine("Выход из программы...");
+                    return;
+                }
                 else if (command.StartsWith("add"))
-                    taskCount = AddTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, multiline);
+                    taskCount = AddTask(input,  taskDescriptions,  taskStatuses,  taskDates, taskCount, multiline);
                 else if (command.StartsWith("done"))
                     taskCount = MarkTaskAsDone(input, taskDescriptions, taskStatuses, taskDates, taskCount);
                 else if (command.StartsWith("delete"))
-                    taskCount = DeleteTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
+                    taskCount = DeleteTask(input,  taskDescriptions,  taskStatuses,  taskDates, taskCount, force);
                 else if (command.StartsWith("update"))
-                    taskCount = UpdateTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
+                    taskCount = UpdateTask(input,  taskDescriptions,  taskStatuses,  taskDates, taskCount, force);
                 else if (command.StartsWith("read"))
                     ReadTask(input, taskDescriptions, taskStatuses, taskDates, taskCount);
                 else
@@ -186,7 +189,7 @@ namespace TodoList
             Console.WriteLine($"{firstName} {lastName}, {birthYear}\n");
         }
         // Эт чтобы добавить задачу с мультиками
-        static int AddTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool multiline = false)
+        static int AddTask(string input,  string[] descriptions,  bool[] statuses,  DateTime[] dates, int taskCount, bool multiline = false)
         {
             string task = "";
 
@@ -225,7 +228,7 @@ namespace TodoList
 
             if (taskCount >= descriptions.Length)
             {
-                ExpandArrays(ref descriptions, ref statuses, ref dates);
+                ExpandArrays( descriptions,  statuses,  dates);
                 Console.WriteLine($"Массивы расширены до {descriptions.Length} элементов");
             }
 
@@ -379,7 +382,7 @@ namespace TodoList
         }
         // Это удалит задачу
 
-        static int DeleteTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force = false)
+        static int DeleteTask(string input,  string[] descriptions,  bool[] statuses,  DateTime[] dates, int taskCount, bool force = false)
         {
             if (descriptions == null || statuses == null || dates == null)
                 return taskCount;
@@ -414,7 +417,7 @@ namespace TodoList
             return taskCount;
         }
 
-        static int UpdateTask(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force = false)
+        static int UpdateTask(string input,  string[] descriptions,  bool[] statuses,  DateTime[] dates, int taskCount, bool force = false)
         {
             if (descriptions == null || statuses == null || dates == null)
                 return taskCount;
@@ -473,7 +476,7 @@ namespace TodoList
             Console.WriteLine($"Дата изменения: {formattedDate}\n");
         }
 
-        static void ExpandArrays(ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates)
+        static void ExpandArrays( string[] descriptions,  bool[] statuses,  DateTime[] dates)
         {
             if (descriptions == null || statuses == null || dates == null)
                 return;

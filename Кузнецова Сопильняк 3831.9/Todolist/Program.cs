@@ -2,6 +2,18 @@
 
 namespace TodoList
 {
+    class Profile
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int BirthYear { get; set; }
+
+        public string GetInfo()
+        {
+            return $"{FirstName} {LastName}, возраст {BirthYear}";
+        }
+    }
+
     class TodoList
     {
         private TodoItem[] items;
@@ -214,30 +226,29 @@ namespace TodoList
                 ShowHelp();
             }
 
-            string firstName = "";
-            string lastName = "";
-            int birthYear = 0;
+            Profile profile = new Profile();
 
             if (!skipProfile)
             {
                 Console.Write("Введите имя: ");
-                firstName = Console.ReadLine();
+                profile.FirstName = Console.ReadLine();
 
                 Console.Write("Введите фамилию: ");
-                lastName = Console.ReadLine();
+                profile.LastName = Console.ReadLine();
 
                 Console.Write("Введите возраст: ");
                 string yearInput = Console.ReadLine();
 
+                int birthYear;
                 while (!int.TryParse(yearInput, out birthYear))
                 {
                     Console.Write("Ошибка! Введите корректный возраст: ");
                     yearInput = Console.ReadLine();
                 }
-                // Результаты 
-                Console.WriteLine($"Добро пожаловать пользователь {firstName} {lastName}, возраст - {birthYear}");
+                profile.BirthYear = birthYear;
+                Console.WriteLine($"Добро пожаловать пользователь {profile.GetInfo()}");
             }
-            // Это массивы для задач
+            
             TodoList todoList = new TodoList();
 
             while (true)
@@ -275,10 +286,9 @@ namespace TodoList
                 if (command == "help")
                     ShowHelp();
                 else if (command == "profile")
-                    ExecuteProfile(firstName, lastName, birthYear, skipProfile);
+                    ExecuteProfile(profile, skipProfile);
                 else if (command == "view")
                     ExecuteView(todoList, input);
-                //Ссылочка :3
                 else if (command == "link")
                     ExecuteLink();
                 else if (command == "exit")
@@ -302,7 +312,7 @@ namespace TodoList
             }
         }
 
-        static void ExecuteProfile(string firstName, string lastName, int birthYear, bool skipProfile)
+        static void ExecuteProfile(Profile profile, bool skipProfile)
         {
             if (skipProfile)
             {
@@ -310,7 +320,7 @@ namespace TodoList
             }
             else
             {
-                ShowProfile(firstName, lastName, birthYear);
+                ShowProfile(profile);
             }
         }
 
@@ -328,7 +338,6 @@ namespace TodoList
             Console.WriteLine("Неизвестная команда. Введите 'help' для просмотра доступных команд.");
         }
 
-        // Единственное, что может помочь (нет)
         static void ShowHelp()
         {
             Console.WriteLine(@"
@@ -358,15 +367,15 @@ namespace TodoList
             --all, -a - показывать все данные (view)
             ");
         }
-        // Выводит данные пользователя
-        static void ShowProfile(string firstName, string lastName, int birthYear)
+
+        static void ShowProfile(Profile profile)
         {
-            if (firstName == null) firstName = "";
-            if (lastName == null) lastName = "";
+            if (profile.FirstName == null) profile.FirstName = "";
+            if (profile.LastName == null) profile.LastName = "";
             Console.WriteLine($"\n=== Профиль пользователя ===");
-            Console.WriteLine($"{firstName} {lastName}, {birthYear}\n");
+            Console.WriteLine($"{profile.GetInfo()}\n");
         }
-        // Эт чтобы добавить задачу с мультиками
+
         static void AddTask(string input, TodoList todoList, bool multiline = false)
         {
             string task = "";
@@ -449,7 +458,6 @@ namespace TodoList
 
             todoList.View(showIndex, showStatus, showDate);
         }
-        // Покажет задачи
 
         static void MarkTaskAsDone(string input, TodoList todoList)
         {
@@ -467,7 +475,6 @@ namespace TodoList
 
             Console.WriteLine($"Задача \"{item.Text}\" отмечена как выполненная");
         }
-        // Это удалит задачу
 
         static void DeleteTask(string input, TodoList todoList, bool force = false)
         {

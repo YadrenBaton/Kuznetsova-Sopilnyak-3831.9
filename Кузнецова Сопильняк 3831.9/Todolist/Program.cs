@@ -5,8 +5,8 @@ namespace TodoList
     class Program
     {
 
-        private const int INITIAL_ARRAY_SIZE = 2;
-        private const int ARRAY_EXPANSION_MULTIPLIER = 2;
+        private const int intialArraySize = 2;
+        private const int arrayExpansionMultiplier = 2;
         
         static void Main(string[] args)
         {
@@ -61,9 +61,9 @@ namespace TodoList
                 Console.WriteLine($"Добро пожаловать пользователь {firstName} {lastName}, возраст - {birthYear}");
             }
             // Это массивы для задач
-            string[] taskDescriptions = new string[INITIAL_ARRAY_SIZE];
-            bool[] taskStatuses = new bool[INITIAL_ARRAY_SIZE];
-            DateTime[] taskDates = new DateTime[INITIAL_ARRAY_SIZE];
+            string[] taskDescriptions = new string[intialArraySize];
+            bool[] taskStatuses = new bool[intialArraySize];
+            DateTime[] taskDates = new DateTime[intialArraySize];
             int taskCount = 0;
 
             while (true)
@@ -540,7 +540,7 @@ namespace TodoList
             if (descriptions == null || statuses == null || dates == null)
                 return;
 
-            int newSize = descriptions.Length * ARRAY_EXPANSION_MULTIPLIER;
+            int newSize = descriptions.Length * arrayExpansionMultiplier;
             
             string[] newDescriptions = new string[newSize];
             bool[] newStatuses = new bool[newSize];

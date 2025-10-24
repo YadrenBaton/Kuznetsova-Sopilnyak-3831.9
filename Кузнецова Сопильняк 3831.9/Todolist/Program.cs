@@ -68,7 +68,6 @@ namespace TodoList
 
             while (true)
             {
-                Console.Write("> ");
                 string input = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(input))

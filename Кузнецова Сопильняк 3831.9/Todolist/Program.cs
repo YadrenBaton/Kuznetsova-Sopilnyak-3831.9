@@ -179,13 +179,49 @@ namespace TodoList
             }
             else
             {
-                ShowProfile(profile);
+                Console.WriteLine(profile.GetInfo());
             }
         }
 
         static void ExecuteView(TodoList todoList, string input)
         {
-            ViewTasks(todoList, input);
+            string[] inputParts = input.Split(' ');
+            if (inputParts == null)
+                return;
+
+            bool showIndex = false;
+            bool showStatus = false;
+            bool showDate = false;
+            bool showAll = false;
+
+            for (int i = 1; i < inputParts.Length; i++)
+            {
+                if (inputParts[i] == "--index" || inputParts[i] == "-i" || inputParts[i] == "-is" || inputParts[i] == "-dis")
+                {
+                    showIndex = true;
+                }
+                else if (inputParts[i] == "--status" || inputParts[i] == "-s" || inputParts[i] == "-is" || inputParts[i] == "-ds" || inputParts[i] == "-dis")
+                {
+                    showStatus = true;
+                }
+                else if (inputParts[i] == "--update-date" || inputParts[i] == "-d" || inputParts[i] == "-ds" || inputParts[i] == "-dis")
+                {
+                    showDate = true;
+                }
+                else if (inputParts[i] == "--all" || inputParts[i] == "-a")
+                {
+                    showAll = true;
+                }
+            }
+
+            if (showAll)
+            {
+                showIndex = true;
+                showStatus = true;
+                showDate = true;
+            }
+
+            todoList.View(showIndex, showStatus, showDate);
         }
 
         static void ExecuteLink()
@@ -225,14 +261,6 @@ namespace TodoList
             --update-date, -d - показывать дату изменения (view)
             --all, -a - показывать все данные (view)
             ");
-        }
-
-        static void ShowProfile(Profile profile)
-        {
-            if (profile.FirstName == null) profile.FirstName = "";
-            if (profile.LastName == null) profile.LastName = "";
-            Console.WriteLine($"\n=== Профиль пользователя ===");
-            Console.WriteLine($"{profile.GetInfo()}\n");
         }
 
         static void AddTask(string input, TodoList todoList, bool multiline = false)
@@ -275,47 +303,6 @@ namespace TodoList
             todoList.Add(newItem);
 
             Console.WriteLine($"Задача добавлена: \"{task}\"");
-        }
-
-        static void ViewTasks(TodoList todoList, string input)
-        {
-            string[] inputParts = input.Split(' ');
-            if (inputParts == null)
-                return;
-
-            bool showIndex = false;
-            bool showStatus = false;
-            bool showDate = false;
-            bool showAll = false;
-
-            for (int i = 1; i < inputParts.Length; i++)
-            {
-                if (inputParts[i] == "--index" || inputParts[i] == "-i" || inputParts[i] == "-is" || inputParts[i] == "-dis")
-                {
-                    showIndex = true;
-                }
-                else if (inputParts[i] == "--status" || inputParts[i] == "-s" || inputParts[i] == "-is" || inputParts[i] == "-ds" || inputParts[i] == "-dis")
-                {
-                    showStatus = true;
-                }
-                else if (inputParts[i] == "--update-date" || inputParts[i] == "-d" || inputParts[i] == "-ds" || inputParts[i] == "-dis")
-                {
-                    showDate = true;
-                }
-                else if (inputParts[i] == "--all" || inputParts[i] == "-a")
-                {
-                    showAll = true;
-                }
-            }
-
-            if (showAll)
-            {
-                showIndex = true;
-                showStatus = true;
-                showDate = true;
-            }
-
-            todoList.View(showIndex, showStatus, showDate);
         }
 
         static void MarkTaskAsDone(string input, TodoList todoList)
@@ -415,8 +402,7 @@ namespace TodoList
                 return;
             }
 
-            Console.WriteLine($"\n=== Задача {taskIndex} ===");
-            Console.WriteLine(item.GetFullInfo() + "\n");
+            Console.WriteLine(item.GetFullInfo());
         }
 
         static string ExtractTaskText(string input)

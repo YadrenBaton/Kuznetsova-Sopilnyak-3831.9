@@ -37,7 +37,7 @@ namespace TodoList
             items[items.Length - 1] = null;
         }
 
-        public void View(bool showIndex, bool showDone, bool showDate)
+        public void View(bool showIndex, bool showStatus, bool showDate)
         {
             int taskCount = 0;
             for (int i = 0; i < items.Length; i++)
@@ -64,14 +64,14 @@ namespace TodoList
             string header = "";
             if (showIndex) header += "Индекс".PadRight(indexWidth);
             header += "Описание".PadRight(descriptionWidth);
-            if (showDone) header += "Статус".PadRight(statusWidth);
+            if (showStatus) header += "Статус".PadRight(statusWidth);
             if (showDate) header += "Дата изменения".PadRight(dateWidth);
             Console.WriteLine(header);
 
             string separator = "";
             if (showIndex) separator += new string('-', indexWidth);
             separator += new string('-', descriptionWidth);
-            if (showDone) separator += new string('-', statusWidth);
+            if (showStatus) separator += new string('-', statusWidth);
             if (showDate) separator += new string('-', dateWidth);
             Console.WriteLine(separator);
 
@@ -94,7 +94,7 @@ namespace TodoList
 
                 line += shortDescription.PadRight(descriptionWidth);
 
-                if (showDone)
+                if (showStatus)
                 {
                     line += statusText.PadRight(statusWidth);
                 }

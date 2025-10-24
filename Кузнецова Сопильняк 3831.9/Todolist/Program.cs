@@ -112,13 +112,13 @@ namespace TodoList
                 else if (command.StartsWith("add"))
                     taskCount = AddTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, multiline);
                 else if (command.StartsWith("done"))
-                    taskCount = ExecuteDone(input, taskDescriptions, taskStatuses, taskDates, taskCount);
+                    taskCount = MarkTaskAsDone(input, taskDescriptions, taskStatuses, taskDates, taskCount);
                 else if (command.StartsWith("delete"))
-                    taskCount = ExecuteDelete(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
+                    taskCount = DeleteTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
                 else if (command.StartsWith("update"))
-                    taskCount = ExecuteUpdate(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
+                    taskCount = UpdateTask(input, ref taskDescriptions, ref taskStatuses, ref taskDates, taskCount, force);
                 else if (command.StartsWith("read"))
-                    ExecuteRead(input, taskDescriptions, taskStatuses, taskDates, taskCount);
+                    ReadTask(input, taskDescriptions, taskStatuses, taskDates, taskCount);
                 else
                     ExecuteUnknown();
 
@@ -146,33 +146,7 @@ namespace TodoList
         {
             Console.WriteLine("https://youtu.be/dQw4w9WgXcQ?si=RqvXF3hYQQogSgMs");
         }
-
-        static void ExecuteExit()
-        {
-            Console.WriteLine("Выход из программы...");
-        }
-
-        static int ExecuteDone(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
-        {
-            return MarkTaskAsDone(input, descriptions, statuses, dates, taskCount);
-        }
-
-        static int ExecuteDelete(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force)
-        {
-            return DeleteTask(input, ref descriptions, ref statuses, ref dates, taskCount, force);
-        }
-
-        static int ExecuteUpdate(string input, ref string[] descriptions, ref bool[] statuses, ref DateTime[] dates, int taskCount, bool force)
-        {
-            return UpdateTask(input, ref descriptions, ref statuses, ref dates, taskCount, force);
-        }
-
-        static void ExecuteRead(string input, string[] descriptions, bool[] statuses, DateTime[] dates, int taskCount)
-        {
-            ReadTask(input, descriptions, statuses, dates, taskCount);
-        }
-
-        static void ExecuteUnknown()
+       static void ExecuteUnknown()
         {
             Console.WriteLine("Неизвестная команда. Введите 'help' для просмотра доступных команд.");
         }

@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class ViewCommand : ICommand
+    public sealed class ViewCommand : ICommand
     {
         public bool ShowIndex { get; set; }
         public bool ShowStatus { get; set; }

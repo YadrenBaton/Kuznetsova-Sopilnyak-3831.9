@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class ReadCommand : ICommand
+    public sealed class ReadCommand : ICommand
     {
         public int TaskIndex { get; set; }
         public TodoList TodoList { get; set; }

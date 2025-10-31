@@ -1,7 +1,7 @@
 namespace TodoList
 {
 
-    class TodoList
+    public sealed class TodoList
     {
         private TodoItem[] items;
 

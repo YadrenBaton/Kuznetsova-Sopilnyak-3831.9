@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class TodoItem
+    public sealed  class TodoItem
     {
         public string Text { get; private set; }
         public bool IsDone { get; private set; }

@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class LinkCommand : ICommand
+    public sealed class LinkCommand : ICommand
     {
         public void Execute()
         {

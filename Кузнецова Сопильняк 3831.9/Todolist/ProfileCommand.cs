@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class ProfileCommand : ICommand
+    public sealed class ProfileCommand : ICommand
     {
         public Profile Profile { get; set; }
         public bool SkipProfile { get; set; }

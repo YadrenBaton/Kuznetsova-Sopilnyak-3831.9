@@ -1,10 +1,10 @@
 namespace TodoList
-{ 
-class HelpCommand : ICommand
 {
-    public void Execute()
+    public sealed class HelpCommand : ICommand
     {
-        Console.WriteLine(@"
+        public void Execute()
+        {
+            Console.WriteLine(@"
             === Доступные команды ===
             help - показать этот список команд
             profile - показать данные пользователя

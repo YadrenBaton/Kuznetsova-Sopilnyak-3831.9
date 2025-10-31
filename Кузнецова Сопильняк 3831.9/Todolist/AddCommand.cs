@@ -1,7 +1,7 @@
 namespace TodoList
 {
 
-    class AddCommand : ICommand
+    public sealed class AddCommand : ICommand
     {
         public string TaskText { get; set; }
         public bool Multiline { get; set; }

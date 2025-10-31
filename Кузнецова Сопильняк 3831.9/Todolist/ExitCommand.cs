@@ -1,7 +1,7 @@
 namespace TodoList
 {
 
-    class ExitCommand : ICommand
+    public sealed class ExitCommand : ICommand
     {
         public void Execute()
         {

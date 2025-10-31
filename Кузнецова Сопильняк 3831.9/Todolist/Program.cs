@@ -3,7 +3,7 @@
 namespace TodoList
 {
 
-    class Program
+    public sealed  class Program
     {
 
         private const int intialArraySize = 2;

@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class UpdateCommand : ICommand
+    public sealed class UpdateCommand : ICommand
     {
         public int TaskIndex { get; set; }
         public string NewText { get; set; }

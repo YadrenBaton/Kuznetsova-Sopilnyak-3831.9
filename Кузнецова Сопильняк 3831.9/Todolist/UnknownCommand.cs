@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class UnknownCommand : ICommand
+    public sealed class UnknownCommand : ICommand
     {
         public void Execute()
         {

@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class DeleteCommand : ICommand
+    public sealed class DeleteCommand : ICommand
     {
         public int TaskIndex { get; set; }
         public bool Force { get; set; }

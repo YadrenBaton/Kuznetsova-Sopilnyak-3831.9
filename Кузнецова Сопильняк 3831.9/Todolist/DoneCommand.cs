@@ -1,7 +1,7 @@
 namespace TodoList
 {
 
-    class DoneCommand : ICommand
+    public sealed class DoneCommand : ICommand
     {
         public int TaskIndex { get; set; }
         public TodoList TodoList { get; set; }

@@ -1,6 +1,6 @@
 namespace TodoList
 {
-    class Profile
+    public sealed  class Profile
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -192,7 +192,6 @@ namespace TodoList
             bool showIndex = false;
             bool showStatus = false;
             bool showDate = false;
-            bool showAll = false;
 
             for (int i = 1; i < inputParts.Length; i++)
             {
@@ -210,15 +209,10 @@ namespace TodoList
                 }
                 else if (inputParts[i] == "--all" || inputParts[i] == "-a")
                 {
-                    showAll = true;
+                    showIndex = true;
+                    showStatus = true;
+                    showDate = true;
                 }
-            }
-
-            if (showAll)
-            {
-                showIndex = true;
-                showStatus = true;
-                showDate = true;
             }
 
             todoList.View(showIndex, showStatus, showDate);

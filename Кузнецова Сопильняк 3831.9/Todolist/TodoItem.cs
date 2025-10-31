@@ -22,7 +22,7 @@ namespace TodoList
             }
             IncreaseArray(items, item);
         }
-
+// test
         public void Delete(int index)
         {
             if (index < 0 || index >= items.Length || items[index] == null)

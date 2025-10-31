@@ -1,3 +1,7 @@
-public interface IComand {
-public void Execute() {}
+namespace TodoList
+{
+    public interface ICommand
+    {
+        void Execute();
+    }
 }

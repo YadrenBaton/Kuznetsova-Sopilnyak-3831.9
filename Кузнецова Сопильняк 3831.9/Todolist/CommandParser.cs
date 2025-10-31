@@ -154,9 +154,13 @@ namespace TodoList
                 return -1;
             }
 
-            if (parts.Length < 2 || !int.TryParse(parts[1], out int taskIndex))
+            int taskIndex = -1;
+            for (int i = 1; i < parts.Length; i++)
             {
-                return -1;
+                if (int.TryParse(parts[i], out taskIndex))
+                {
+                    break;
+                }
             }
 
             if (taskIndex < 0)

@@ -28,8 +28,6 @@ namespace TodoList
             if (index < 0 || index >= items.Length || items[index] == null)
                 return;
 
-            items[index] = null;
-
             for (int i = index; i < items.Length - 1; i++)
             {
                 items[i] = items[i + 1];

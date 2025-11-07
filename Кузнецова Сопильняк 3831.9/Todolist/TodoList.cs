@@ -127,5 +127,18 @@ namespace TodoList
             newItems[items.Length] = item;
             this.items = newItems;
         }
+        public int GetItemCount()
+        {
+            int count = 0;
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] != null)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
     }
+
 }

@@ -1,0 +1,101 @@
+namespace TodoList
+{
+    public static class FileManager
+    {
+        public static void EnsureDataDirectory(string dirPath)
+        {
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+        }
+
+        public static void SaveProfile(Profile profile, string filePath)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                writer.WriteLine(profile.FirstName);
+                writer.WriteLine(profile.LastName);
+                writer.WriteLine(profile.BirthYear);
+            }
+        }
+
+        public static Profile LoadProfile(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return null;
+
+            string[] lines = File.ReadAllLines(filePath);
+            if (lines.Length < 3)
+                return null;
+
+            Profile profile = new Profile();
+            profile.FirstName = lines[0];
+            profile.LastName = lines[1];
+            
+            int birthYear;
+            if (int.TryParse(lines[2], out birthYear))
+            {
+                profile.BirthYear = birthYear;
+            }
+
+            return profile;
+        }
+
+        public static void SaveTodos(TodoList todos, string filePath)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                for (int i = 0; i < todos.GetItemCount(); i++)
+                {
+                    TodoItem item = todos.GetItem(i);
+                    if (item != null)
+                    {
+                        string text = item.Text.Replace("\"", "\"\"");
+                        writer.WriteLine($"\"{text}\",{item.IsDone},{item.LastUpdate:yyyy-MM-dd HH:mm:ss}");
+                    }
+                }
+            }
+        }
+
+        public static TodoList LoadTodos(string filePath)
+        {
+            TodoList todoList = new TodoList();
+
+            if (!File.Exists(filePath))
+                return todoList;
+
+            string[] lines = File.ReadAllLines(filePath);
+            foreach (string line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                string[] parts = line.Split(',');
+                if (parts.Length < 3)
+                    continue;
+
+                try
+                {
+                    string text = parts[0].Trim('"').Replace("\"\"", "\"");
+                    bool isDone = bool.Parse(parts[1]);
+                    DateTime lastUpdate = DateTime.ParseExact(parts[2], "yyyy-MM-dd HH:mm:ss", null);
+
+                    TodoItem item = new TodoItem(text);
+                    if (isDone)
+                    {
+                        item.MarkDone();
+                    }
+                    
+                    todoList.Add(item);
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+
+            return todoList;
+        }
+    }
+}

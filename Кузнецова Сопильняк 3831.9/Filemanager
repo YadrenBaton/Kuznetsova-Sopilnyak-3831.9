@@ -46,13 +46,15 @@ namespace TodoList
         {
             using (StreamWriter writer = new StreamWriter(filePath))
             {
+                writer.WriteLine("Index;Text;IsDone;LastUpdate");
+                
                 for (int i = 0; i < todos.GetItemCount(); i++)
                 {
                     TodoItem item = todos.GetItem(i);
                     if (item != null)
                     {
-                        string text = item.Text.Replace("\"", "\"\"");
-                        writer.WriteLine($"\"{text}\",{item.IsDone},{item.LastUpdate:yyyy-MM-dd HH:mm:ss}");
+                        string text = item.Text.Replace("\\", "\\\\").Replace("\"", "\"\"").Replace("\n", "\\n").Replace("\r", "\\r");
+                        writer.WriteLine($"{i};\"{text}\";{item.IsDone};{item.LastUpdate:yyyy-MM-ddTHH:mm:ss}");
                     }
                 }
             }
@@ -66,20 +68,21 @@ namespace TodoList
                 return todoList;
 
             string[] lines = File.ReadAllLines(filePath);
-            foreach (string line in lines)
+            for (int i = 1; i < lines.Length; i++)
             {
-                if (string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(lines[i]))
                     continue;
 
-                string[] parts = line.Split(',');
-                if (parts.Length < 3)
+                string[] parts = lines[i].Split(';');
+                if (parts.Length < 4)
                     continue;
 
                 try
                 {
-                    string text = parts[0].Trim('"').Replace("\"\"", "\"");
-                    bool isDone = bool.Parse(parts[1]);
-                    DateTime lastUpdate = DateTime.ParseExact(parts[2], "yyyy-MM-dd HH:mm:ss", null);
+                    int index = int.Parse(parts[0]);
+                    string text = parts[1].Trim('"').Replace("\"\"", "\"").Replace("\\n", "\n").Replace("\\r", "\r").Replace("\\\\", "\\");
+                    bool isDone = bool.Parse(parts[2]);
+                    DateTime lastUpdate = DateTime.Parse(parts[3]);
 
                     TodoItem item = new TodoItem(text);
                     if (isDone)

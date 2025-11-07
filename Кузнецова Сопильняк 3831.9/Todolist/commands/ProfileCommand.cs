@@ -14,6 +14,7 @@ namespace TodoList
             else
             {
                 Console.WriteLine(Profile.GetInfo());
+                FileManager.SaveProfile(Profile, "data/profile.txt");
             }
         }
     }

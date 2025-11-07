@@ -27,6 +27,7 @@ namespace TodoList
             item.UpdateText(NewText);
 
             Console.WriteLine($"Задача обновлена: \"{oldText}\" -> \"{NewText}\"");
+            FileManager.SaveTodos(TodoList, "data/todo.csv");
         }
     }
 }

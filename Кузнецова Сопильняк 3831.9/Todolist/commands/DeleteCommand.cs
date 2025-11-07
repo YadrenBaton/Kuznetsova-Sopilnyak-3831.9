@@ -26,6 +26,7 @@ namespace TodoList
 
             TodoList.Delete(TaskIndex);
             Console.WriteLine($"Задача \"{deletedTask}\" удалена");
+            FileManager.SaveTodos(TodoList, "data/todo.csv");
         }
     }
 }

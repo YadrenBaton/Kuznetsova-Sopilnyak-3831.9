@@ -1,6 +1,5 @@
 namespace TodoList
 {
-
     public sealed class AddCommand : ICommand
     {
         public string TaskText { get; set; }
@@ -47,7 +46,7 @@ namespace TodoList
             TodoList.Add(newItem);
 
             Console.WriteLine($"Задача добавлена: \"{task}\"");
+            FileManager.SaveTodos(TodoList, "data/todo.csv");
         }
     }
-
 }

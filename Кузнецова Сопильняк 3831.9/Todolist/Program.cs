@@ -1,11 +1,7 @@
-﻿using System;
-
-namespace TodoList
+﻿namespace TodoList
 {
-
     public sealed class Program
     {
-
         private const int intialArraySize = 2;
         private const int arrayExpansionMultiplier = 2;
 
@@ -39,9 +35,25 @@ namespace TodoList
                 helpCommand.Execute();
             }
 
-            Profile profile = new Profile();
+            string dataDir = "data";
+            string profileFilePath = Path.Combine(dataDir, "profile.txt");
+            string todoFilePath = Path.Combine(dataDir, "todo.csv");
 
-            if (!skipProfile)
+            FileManager.EnsureDataDirectory(dataDir);
+
+            Profile profile = FileManager.LoadProfile(profileFilePath);
+            if (profile == null)
+            {
+                profile = new Profile();
+            }
+
+            TodoList todoList = FileManager.LoadTodos(todoFilePath);
+            if (todoList == null)
+            {
+                todoList = new TodoList();
+            }
+
+            if (!skipProfile && profile.FirstName == null)
             {
                 Console.Write("Введите имя: ");
                 profile.FirstName = Console.ReadLine();
@@ -60,10 +72,9 @@ namespace TodoList
                 }
                 profile.BirthYear = birthYear;
                 Console.WriteLine($"Добро пожаловать пользователь {profile.GetInfo()}");
+                FileManager.SaveProfile(profile, profileFilePath);
             }
             
-            TodoList todoList = new TodoList();
-
             while (true)
             {
                 string input = Console.ReadLine();

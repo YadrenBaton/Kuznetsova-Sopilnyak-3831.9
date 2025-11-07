@@ -1,6 +1,5 @@
 namespace TodoList
 {
-
     public sealed class DoneCommand : ICommand
     {
         public int TaskIndex { get; set; }
@@ -18,7 +17,7 @@ namespace TodoList
             item.MarkDone();
 
             Console.WriteLine($"Задача \"{item.Text}\" отмечена как выполненная");
+            FileManager.SaveTodos(TodoList, "data/todo.csv");
         }
     }
-
 }
